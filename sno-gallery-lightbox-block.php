@@ -14,9 +14,7 @@ if (!defined('ABSPATH')){
     die();
 }
 
-if (file_exists( dirname(__FILE__). '/vendor/autoload.php')) {
-    require_once dirname(__FILE__). '/vendor/autoload.php';
-}
+
 
 
 define( 'SNO_GALLERY_LIGHTBOX_BLOCK_PLUGIN_VERSION', '1.0.0' );
