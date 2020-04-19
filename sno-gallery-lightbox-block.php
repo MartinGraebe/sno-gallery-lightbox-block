@@ -23,8 +23,38 @@ class SNO_GALLERY_LIGHTBOX_BLOCK {
  
     function register(){
         add_action( 'init', array($this, 'block_scripts') );
+        add_action( 'init', array($this, 'custom_thumb_sizes') );
         add_filter('the_content',  array($this, 'enqueue_frontend_block_sno_gallery_block') ); 
+        add_filter('wp_prepare_attachment_for_js',  array($this, 'custom_thumb_sizes_in_json'), 10, 3 ); 
+
         
+    }
+    function custom_thumb_sizes(){
+        // register horizontal and vertical  orientation non cropped image sizes in wp
+        add_image_size( 'sno_gallery_horizontal', 0, 300, false );
+        add_image_size( 'sno_gallery_vertical', 300, 0, false );
+        add_image_size( 'sno_gallery_square', 300, 300, false );
+    }
+    function custom_thumb_sizes_in_json($response, $attachment, $meta){
+        $custom_sizes = array ('sno_gallery_horizontal', 'sno_gallery_vertical', 'sno_gallery_square'  );
+
+        foreach( $custom_sizes as $size){
+            if( isset($meta['sizes'][$size])){
+                $attachment_url = wp_get_attachment_url($attachment->ID);
+                $base_url = str_replace( wp_basename( $attachment_url ), '', $attachment_url );
+                $size_meta = $meta['sizes'][ $size ];
+
+                $response['sizes'][ $size ] = array(
+                    'height'        => $size_meta['height'],
+                    'width'         => $size_meta['width'],
+                    'url'           => $base_url . $size_meta['file'],
+                    'orientation'   => $size_meta['height'] > $size_meta['width'] ? 'portrait' : 'landscape',
+                );
+            }
+        
+        
+        }
+        return $response;
     }
     function block_scripts(){
          // admin styles
