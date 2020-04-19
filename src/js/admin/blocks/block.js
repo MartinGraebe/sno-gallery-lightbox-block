@@ -1,7 +1,7 @@
 const { __ } = wp.i18n; // for internationalization
 const { registerBlockType } = wp.blocks; 
 const {InspectorControls, MediaUploadCheck, MediaUpload} = wp.blockEditor;
-const { Button, Icon } = wp.components;
+const { Button, Icon, ToggleControl } = wp.components;
 
 
 
@@ -32,6 +32,10 @@ registerBlockType('sno/sno-gallery-lightbox-block', {
             type: 'string',
             default: '',
         },
+        squareThumbs: {
+            type: 'boolean',
+            default: false,
+        }
       
       
         
@@ -39,12 +43,17 @@ registerBlockType('sno/sno-gallery-lightbox-block', {
 
     edit: (props) => {
         const { setAttributes, attributes } = props;
-        const { galleryImages, galleryId, imageIds } = props.attributes;
+        const { galleryImages, galleryId, imageIds, squareThumbs } = props.attributes;
         function createRandomId(){
             const date = new Date();
             const sec = date.getMilliseconds();
             const id = Math.ceil(Math.random()*100) + sec;
             return id.toString();
+        }
+        function toggleSquareThumbs(){
+            setAttributes({
+                squareThumbs: !squareThumbs
+            })
         }
         function onGallerySelect(galleryObject) {
             setAttributes({
@@ -53,13 +62,30 @@ registerBlockType('sno/sno-gallery-lightbox-block', {
                 galleryId: createRandomId(), 
             })
         }
-        const giveOutImages = galleryImages.length > 0 && galleryImages.map( item => 
-            <img id={`sno-gallery-block-image-${item.id}`} class="sno-gallery-block-image"  alt={item.title} src={item.sizes.thumbnail.url}/>
-        
+        const giveOutImages = galleryImages.length > 0 && galleryImages.map( item => {
+            if (item.orientation === "landscape" && squareThumbs === false){
+                if(typeof item.sizes.sno_gallery_vertical !== 'undefined'){
+                   
+                    return <img key={item.id} id={`sno-gallery-block-image-${item.id}`} class="sno-gallery-block-image"  alt={item.title} src={item.sizes.sno_gallery_vertical.url}/>
+                } 
+                
+            }else if(item.orientation === "portrait" && squareThumbs === false){
+                if(typeof item.sizes.sno_gallery_horizontal !== 'undefined'){
+                    
+                    return <img key={item.id} id={`sno-gallery-block-image-${item.id}`} class="sno-gallery-block-image"  alt={item.title} src={item.sizes.sno_gallery_horizontal.url}/>
+                } 
+            } else {
+               
+                return <img key={item.id} id={`sno-gallery-block-image-${item.id}`} class="sno-gallery-block-image"  alt={item.title} src={item.sizes.thumbnail.url}/>
+            }
+            
+        }
+
+            
         
         )
 
-
+            // CHECK IF Image orientation is landscape or portrait or square by comparing width and height > chose thumb type based on that
         const ALLOW_MEDIA_TYPES = ['image'];
 		function MyGalleryUploader(){
 			return(
@@ -85,6 +111,17 @@ registerBlockType('sno/sno-gallery-lightbox-block', {
         }
         
         return(
+            <div>
+            <InspectorControls>
+                <ToggleControl 
+                    label = {'Square Thumbnails'}
+                    checked = {squareThumbs}
+                    onChange = {toggleSquareThumbs}
+                
+                
+                
+                />
+            </InspectorControls>
             <div className="sno-gallery-block-backend-main">
 				<MyGalleryUploader />
 				{console.log(galleryImages, 'gallery')}
@@ -94,17 +131,35 @@ registerBlockType('sno/sno-gallery-lightbox-block', {
 				</div>
 				
 			</div>
+            </div>
         );
     },
 
 
     save: (props) => {
         const {  attributes } = props;
-        const {  galleryImages, galleryId } = props.attributes;
+        const {  galleryImages, galleryId, squareThumbs } = props.attributes;
         
-        const frontImages = galleryImages.length > 0 && galleryImages.map( item => 
-            <a class="sno-lightbox-nqaknadj3v" data-lightbox={galleryId} href={item.sizes.full.url} ><img id={`sno-gallery-block-image-${item.id}`} class="sno-gallery-block-image"  alt={item.title} src={item.sizes.thumbnail.url}/></a>
-        
+        const frontImages = galleryImages.length > 0 && galleryImages.map( item => {
+           
+            if (item.orientation === "landscape" && squareThumbs === false){
+                if(typeof item.sizes.sno_gallery_vertical !== 'undefined'){
+                   
+                    return <a class="sno-lightbox-nqaknadj3v" data-lightbox={galleryId} href={item.sizes.full.url} ><img key={item.id} id={`sno-gallery-block-image-${item.id}`} class="sno-gallery-block-image"  alt={item.title} src={item.sizes.sno_gallery_vertical.url}/></a>
+                } 
+                
+            }else if(item.orientation === "portrait" && squareThumbs === false){
+                if(typeof item.sizes.sno_gallery_horizontal !== 'undefined'){
+                    
+                    return  <a class="sno-lightbox-nqaknadj3v" data-lightbox={galleryId} href={item.sizes.full.url} ><img key={item.id} id={`sno-gallery-block-image-${item.id}`} class="sno-gallery-block-image"  alt={item.title} src={item.sizes.sno_gallery_horizontal.url}/></a>
+                } 
+            } else {
+               
+                return  <a class="sno-lightbox-nqaknadj3v" data-lightbox={galleryId} href={item.sizes.full.url} ><img key={item.id} id={`sno-gallery-block-image-${item.id}`} class="sno-gallery-block-image"  alt={item.title} src={item.sizes.thumbnail.url}/></a>
+            }
+            
+        }
+    
         
         );
         return (
