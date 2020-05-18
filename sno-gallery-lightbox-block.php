@@ -33,7 +33,7 @@ class SNO_GALLERY_LIGHTBOX_BLOCK {
         // register horizontal and vertical  orientation non cropped image sizes in wp
         add_image_size( 'sno_gallery_horizontal', 0, 300, false );
         add_image_size( 'sno_gallery_vertical', 300, 0, false );
-        add_image_size( 'sno_gallery_square', 300, 300, false );
+        add_image_size( 'sno_gallery_square', 300, 300, true );
     }
     function custom_thumb_sizes_in_json($response, $attachment, $meta){
         $custom_sizes = array ('sno_gallery_horizontal', 'sno_gallery_vertical', 'sno_gallery_square'  );
