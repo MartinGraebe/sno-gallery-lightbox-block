@@ -18,8 +18,7 @@
 .sno-gallery-lightbox-block-grid{
   display: grid;
   height: 100%;
-  grid-auto-rows: minmax(min-content, max-content);
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 1rem;
 }
 /* lighbox */
