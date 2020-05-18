@@ -76,7 +76,7 @@ registerBlockType('sno/sno-gallery-lightbox-block', {
                 } 
             } else {
                
-                return <img key={item.id} id={`sno-gallery-block-image-${item.id}`} class="sno-gallery-block-image"  alt={item.title} src={item.sizes.thumbnail.url}/>
+                return <img key={item.id} id={`sno-gallery-block-image-${item.id}`} class="sno-gallery-block-image"  alt={item.title} src={item.sizes.sno_gallery_square.url}/>
             }
             
         }
@@ -155,7 +155,7 @@ registerBlockType('sno/sno-gallery-lightbox-block', {
                 } 
             } else {
                
-                return  <a class="sno-lightbox-nqaknadj3v" data-lightbox={galleryId} href={item.sizes.full.url} ><img key={item.id} id={`sno-gallery-block-image-${item.id}`} class="sno-gallery-block-image"  alt={item.title} src={item.sizes.thumbnail.url}/></a>
+                return  <a class="sno-lightbox-nqaknadj3v" data-lightbox={galleryId} href={item.sizes.full.url} ><img key={item.id} id={`sno-gallery-block-image-${item.id}`} class="sno-gallery-block-image"  alt={item.title} src={item.sizes.sno_gallery_square.url}/></a>
             }
             
         }
@@ -163,7 +163,7 @@ registerBlockType('sno/sno-gallery-lightbox-block', {
         
         );
         return (
-			<div id={galleryId} className="sno-gallery-lightbox-block-front">
+			<div id={galleryId} className="sno-gallery-lightbox-block-grid">
                 {frontImages}
 			</div>
 		);

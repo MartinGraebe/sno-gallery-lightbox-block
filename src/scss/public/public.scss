@@ -1,20 +1,27 @@
 
-.sno-gallery-lightbox-block-front img {
+/* .sno-gallery-lightbox-block-front img {
     max-width: 100%;
     height: auto;
     width: auto;
     max-height: 100%;
     padding: 0.3rem;
    
-}
-.sno-gallery-lightbox-block-front{
+} */
+/* .sno-gallery-lightbox-block-front{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
    
+} */
+/* GRID */
+.sno-gallery-lightbox-block-grid{
+  display: grid;
+  height: 100%;
+  grid-auto-rows: minmax(min-content, max-content);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
 }
-
 /* lighbox */
 #sno_lightbox {
     position: fixed;
